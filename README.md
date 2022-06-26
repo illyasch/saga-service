@@ -17,6 +17,8 @@ The system operation initiates the first step of the saga. The completion of a l
 
 An important benefit of asynchronous messaging is that it ensures the all the steps of a saga are executed even if one or more of the saga’s participants is temporarily unavailable.
 
+![Saga Service Diagram](saga-diagram.png)
+
 ## HTTP handlers
 
 The entrypoint to the code is in cmd/saga-service/saga-service.go. The service has the following HTTP handlers:
