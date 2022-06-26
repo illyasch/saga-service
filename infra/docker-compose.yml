@@ -1,0 +1,118 @@
+version: "3"
+services:
+  saga:
+    image: saga-service:dev
+    ports:
+      - 3000:3000
+    environment:
+      SAGA_DB_HOST: db
+      SAGA_DB_PORT: 5432
+      SAGA_DB_USER: postgres
+      SAGA_DB_PASSWORD: nimda
+      SAGA_DB_NAME: postgres
+    depends_on:
+      - db
+      - queue
+      - service1-stub
+      - service2-stub
+      - service3-stub
+
+  admin:
+    build:
+      context: ..
+      dockerfile: infra/admin.Dockerfile
+    environment:
+      SAGA_DB_HOST: db
+      SAGA_DB_PORT: 5432
+      SAGA_DB_USER: postgres
+      SAGA_DB_PASSWORD: nimda
+      SAGA_DB_NAME: postgres
+    depends_on:
+      - db
+
+  service1-stub:
+    build:
+      context: ..
+      dockerfile: infra/stub.Dockerfile
+    environment:
+      AWS_ACCESS_KEY_ID: foobar
+      AWS_SECRET_ACCESS_KEY: foobar
+      STUB_QUEUE_AWSENDPOINT: http://localhost:4566
+      STUB_QUEUE_COMMANDS_QUEUE: commands1
+      STUB_SERVICE_NAME: service1
+    depends_on:
+      - queue
+
+  service2-stub:
+    build:
+      context: ..
+      dockerfile: infra/stub.Dockerfile
+    environment:
+      AWS_ACCESS_KEY_ID: foobar
+      AWS_SECRET_ACCESS_KEY: foobar
+      STUB_QUEUE_AWSENDPOINT: http://localhost:4566
+      STUB_QUEUE_COMMANDS_QUEUE: commands2
+      STUB_SERVICE_NAME: service2
+    depends_on:
+      - queue
+
+  service3-stub:
+    build:
+      context: ..
+      dockerfile: infra/stub.Dockerfile
+    environment:
+      AWS_ACCESS_KEY_ID: foobar
+      AWS_SECRET_ACCESS_KEY: foobar
+      STUB_QUEUE_AWSENDPOINT: http://localhost:4566
+      STUB_QUEUE_COMMANDS_QUEUE: commands3
+      STUB_SERVICE_NAME: service3
+    depends_on:
+      - queue
+
+  test:
+    build:
+      context: ..
+      dockerfile: infra/test.Dockerfile
+    environment:
+      SAGA_DB_HOST: db
+      SAGA_DB_PORT: 5432
+      SAGA_DB_USER: postgres
+      SAGA_DB_PASSWORD: nimda
+      SAGA_DB_NAME: postgres
+    depends_on:
+      - db
+
+  db:
+    image: postgres:12.11
+    environment:
+      POSTGRES_PASSWORD: nimda
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 7s
+      timeout: 5s
+      retries: 25
+
+  queue:
+    image: localstack/localstack:0.14.3
+    expose:
+      - "4566"
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sns,sqs
+
+  init-queue:
+    build:
+      context: ..
+      dockerfile: infra/queue.Dockerfile
+    environment:
+      SQS_ENDPOINT_URL: http://queue:4566
+      AWS_REGION: us-west-1a
+      WAITFORIT_VERSION: v2.4.1
+      AWSCLI_VERSION: 1.18.120
+      AWS_ACCESS_KEY_ID: foobar
+      AWS_SECRET_ACCESS_KEY: foobar
+    depends_on:
+      - queue
