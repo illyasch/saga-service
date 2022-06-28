@@ -24,8 +24,8 @@ import (
 	"github.com/illyasch/saga-service/pkg/business/saga"
 	"github.com/illyasch/saga-service/pkg/data/database"
 	"github.com/illyasch/saga-service/pkg/data/queue"
+	"github.com/illyasch/saga-service/pkg/sys/app"
 	"github.com/illyasch/saga-service/pkg/sys/logger"
-	"github.com/illyasch/saga-service/pkg/sys/service"
 )
 
 const configPrefix = "SAGA"
@@ -79,8 +79,8 @@ func main() {
 	os.Exit(app.Run(ctx))
 }
 
-func initialize(log *zap.SugaredLogger) (*service.App, error) {
-	app := &service.App{}
+func initialize(log *zap.SugaredLogger) (*app.App, error) {
+	app := &app.App{}
 
 	cfg, err := parseConfig(configPrefix, log)
 	if err != nil {

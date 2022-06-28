@@ -66,6 +66,7 @@ init: seed init-queue	## Initialize a local database and queues
 # Running tests within the local computer
 
 test:  ## Run tests inside a container
+	docker-compose -f $(DOCKER_COMPOSE_FILE) build test
 	docker-compose -f $(DOCKER_COMPOSE_FILE) run --rm test
 
 # ==============================================================================

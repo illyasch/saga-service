@@ -73,14 +73,6 @@ services:
     build:
       context: ..
       dockerfile: infra/test.Dockerfile
-    environment:
-      SAGA_DB_HOST: db
-      SAGA_DB_PORT: 5432
-      SAGA_DB_USER: postgres
-      SAGA_DB_PASSWORD: nimda
-      SAGA_DB_NAME: postgres
-    depends_on:
-      - db
 
   db:
     image: postgres:12.11
