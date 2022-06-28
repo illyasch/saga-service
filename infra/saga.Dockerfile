@@ -30,7 +30,7 @@ USER saga
 CMD ["./saga-service"]
 
 LABEL org.opencontainers.image.created="${BUILD_DATE}" \
-      org.opencontainers.image.title="url-saga" \
+      org.opencontainers.image.title="saga-service" \
       org.opencontainers.image.authors="Ilya Scheblanov <ilya.scheblanov@gmail.com>" \
       org.opencontainers.image.source="https://github.com/illyasch/saga-service/cmd/saga-service" \
       org.opencontainers.image.revision="${BUILD_REF}"

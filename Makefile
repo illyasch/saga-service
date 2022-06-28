@@ -27,8 +27,15 @@ image:		## Build a saga service image in docker
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		.
 
+	docker build \
+		-f infra/stub.Dockerfile \
+		-t queue-stub:$(VERSION) \
+		--build-arg BUILD_REF=$(VERSION) \
+		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+		.
+
 up:             ## Build and start shortener service and dependencies
-	docker-compose -f $(DOCKER_COMPOSE_FILE) up --build -d --force-recreate --remove-orphans saga
+	docker-compose -f $(DOCKER_COMPOSE_FILE) up --build -d --remove-orphans saga
 
 # ==============================================================================
 # Docker support

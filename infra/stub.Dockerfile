@@ -19,6 +19,7 @@ WORKDIR /stub/cmd/queue-stub
 RUN go build -ldflags "-X main.build=${BUILD_REF}"
 
 # Run the Go Binary in Alpine.
+FROM alpine:3.15
 ARG BUILD_DATE
 ARG BUILD_REF
 RUN addgroup -g 1000 -S stub && \
@@ -29,7 +30,7 @@ USER stub
 CMD ["./queue-stub"]
 
 LABEL org.opencontainers.image.created="${BUILD_DATE}" \
-      org.opencontainers.image.title="stub" \
+      org.opencontainers.image.title="queue-stub" \
       org.opencontainers.image.authors="Ilya Scheblanov <ilya.scheblanov@gmail.com>" \
-      org.opencontainers.image.source="https://github.com/illyasch/queue-stub/cmd/queue-stub" \
+      org.opencontainers.image.source="https://github.com/illyasch/saga-service/cmd/queue-stub" \
       org.opencontainers.image.revision="${BUILD_REF}"

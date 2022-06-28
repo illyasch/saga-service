@@ -5,11 +5,14 @@ services:
     ports:
       - 3000:3000
     environment:
+      AWS_ACCESS_KEY_ID: foobar
+      AWS_SECRET_ACCESS_KEY: foobar
       SAGA_DB_HOST: db
       SAGA_DB_PORT: 5432
       SAGA_DB_USER: postgres
       SAGA_DB_PASSWORD: nimda
       SAGA_DB_NAME: postgres
+      SAGA_QUEUE_AWS_ENDPOINT: http://queue:4566
     depends_on:
       - db
       - queue
@@ -31,39 +34,33 @@ services:
       - db
 
   service1-stub:
-    build:
-      context: ..
-      dockerfile: infra/stub.Dockerfile
+    image: queue-stub:dev
     environment:
       AWS_ACCESS_KEY_ID: foobar
       AWS_SECRET_ACCESS_KEY: foobar
-      STUB_QUEUE_AWSENDPOINT: http://localhost:4566
+      STUB_QUEUE_AWS_ENDPOINT: http://queue:4566
       STUB_QUEUE_COMMANDS_QUEUE: commands1
       STUB_SERVICE_NAME: service1
     depends_on:
       - queue
 
   service2-stub:
-    build:
-      context: ..
-      dockerfile: infra/stub.Dockerfile
+    image: queue-stub:dev
     environment:
       AWS_ACCESS_KEY_ID: foobar
       AWS_SECRET_ACCESS_KEY: foobar
-      STUB_QUEUE_AWSENDPOINT: http://localhost:4566
+      STUB_QUEUE_AWS_ENDPOINT: http://queue:4566
       STUB_QUEUE_COMMANDS_QUEUE: commands2
       STUB_SERVICE_NAME: service2
     depends_on:
       - queue
 
   service3-stub:
-    build:
-      context: ..
-      dockerfile: infra/stub.Dockerfile
+    image: queue-stub:dev
     environment:
       AWS_ACCESS_KEY_ID: foobar
       AWS_SECRET_ACCESS_KEY: foobar
-      STUB_QUEUE_AWSENDPOINT: http://localhost:4566
+      STUB_QUEUE_AWS_ENDPOINT: http://queue:4566
       STUB_QUEUE_COMMANDS_QUEUE: commands3
       STUB_SERVICE_NAME: service3
     depends_on:
