@@ -1,31 +1,24 @@
 # saga-service
 
-The service orchestrates work of other services using saga pattern.
+The service orchestrates the work of other services using the saga pattern.
 ```
 Pattern: Saga
 
-Maintain data consistency across services using a sequence of local transactions that are coordinated using asynchronous messaging.
-
+Maintain data consistency across services using a sequence of local transactions coordinated using asynchronous messaging.
 ```
 
 ## Overview
+Sagas are a mechanism to maintain data consistency in a microservice architecture. You define a saga for each system command that needs to update data in multiple services. A saga is a sequence of local transactions. Each local transaction updates data within a single service. The system operation initiates the first step of the saga. Completing a local transaction triggers the execution of the following local transaction.
 
-Sagas are a mechanism to maintain data consistency in a microservice architecture. 
-You define a saga for each system command that needs to update data in multiple services. 
-A saga is a sequence of local transactions. Each local transaction updates data within a single service.
-The system operation initiates the first step of the saga. The completion of a local transaction triggers the execution of the next local transaction.
-
-An important benefit of asynchronous messaging is that it ensures the all the steps of a saga are executed even if one or more of the saga’s participants is temporarily unavailable.
+An essential benefit of asynchronous messaging is that it ensures that all the steps of a saga are executed even if one or more of the saga's participants is temporarily unavailable.
 
 ![Saga Service Diagram](saga-diagram.png)
 
 ## HTTP handlers
+The entry point to the code is in cmd/saga-service/saga-service.go. The service has the following HTTP handlers:
 
-The entrypoint to the code is in cmd/saga-service/saga-service.go. The service has the following HTTP handlers:
-
-- _/start_ - use POST method and x-www-form-urlencoded parameter saga_id with a new saga ID in UUID format. 
-Returns base62 code of the URL. 
-- _/readiness_ - check if the database is ready and if not will return a 500 status if it's not.
+- _/start_ - use POST method and x-www-form-urlencoded parameter saga_id with a new saga ID in UUID format. Returns base62 code of the URL.
+- _/readiness_ - check if the database is ready and will return a 500 status if it's not.
 - _/liveness_ - return simple status info if the service is alive.
 
 ## Prerequisites
